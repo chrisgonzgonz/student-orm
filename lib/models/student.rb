@@ -17,7 +17,6 @@ class Student
     args.flatten.each do |arg|
       define_singleton_method("find_by_#{arg}") do |value|
         result = self.database.execute "SELECT * FROM #{self.table_name} WHERE #{arg} = ?", value
-        binding.pry
         new_from_db(result.first)
       end
     end
@@ -59,21 +58,21 @@ class Student
     end
   end
 
-  def attributes_for_insert
+  def attributes_for_sql
     self.attributes[1..-1]
   end
 
   def question_marks_for_sql
-    attributes_for_insert.collect{|a| "?"}.join(",")
+    attributes_for_sql.collect{|a| "?"}.join(",")
   end
 
   private
     def insert
-      self.class.database.execute "INSERT INTO #{self.class.table_name} (#{self.class.column_names_for_insert}) VALUES (#{self.question_marks_for_sql})", self.attributes_for_insert
+      self.class.database.execute "INSERT INTO #{self.class.table_name} (#{self.class.column_names_for_insert}) VALUES (#{self.question_marks_for_sql})", self.attributes_for_sql
       self.id = self.class.database.last_insert_row_id
     end
 
     def update
-      self.class.database.execute "UPDATE #{self.class.table_name} SET #{self.class.attributes_for_update} WHERE id = ?", self.attributes
+      self.class.database.execute "UPDATE #{self.class.table_name} SET #{self.class.attributes_for_update} WHERE id = ?", [attributes_for_sql, self.id].flatten
     end
 end
