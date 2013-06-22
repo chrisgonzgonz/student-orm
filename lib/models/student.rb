@@ -63,7 +63,7 @@ class Student
   end
 
   def question_marks_for_sql
-    attributes_for_sql.collect{|a| "?"}.join(",")
+    ("?," * attributes_for_sql.size)[0..-2]
   end
 
   private
