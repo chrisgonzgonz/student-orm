@@ -1,6 +1,5 @@
 require 'fis/test'
 require 'sqlite3'
-require 'pry-debugger'
 
 require_relative 'lib/concerns/persistable'
 
@@ -56,6 +55,8 @@ test 'should be able to update a student' do
 
   assert_equal Student.find(s.id).name, "Bob Whitney"
 end
+
+
 
 # test 'should be able to retrive a student with a where statment' do
 #   s = Student.new

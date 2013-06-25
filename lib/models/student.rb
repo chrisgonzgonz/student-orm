@@ -1,3 +1,6 @@
+require_relative "../concerns/persistable.rb"
+require "sqlite3"
+
 class Student
   extend Persistable::ClassMethods
 
